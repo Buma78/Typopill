@@ -89,4 +89,44 @@ export const GlobalStyles = createGlobalStyle`
     }
 
   }
+
+  .upper-menu{
+    display:flex;
+    padding:1rem;
+    max-width:1000px;
+    margin-left:auto;
+    margin-right:auto;
+    justify-content:space-between;
+  }
+
+  .timer-modes{
+    display:flex;
+  }
+
+  .time{
+    margin-left:18px;
+  }
+
+  .time:hover{
+    color:yellow;
+    cursor: pointer;
+  }
+
+  .stats-box{
+    display : flex;
+    max-width:1000px;
+    height:auto;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .title{
+    font-size:20px;
+    color:grey;
+  }
+
+  .subtitle{
+    font-size:30px;
+    color:gold;
+  }
 `;

@@ -1,6 +1,10 @@
-import React, { createRef, useEffect, useRef, useState } from 'react'
+import React, { createRef, useEffect, useMemo, useRef, useState } from 'react'
+import { useTestMode } from '../Contexts/TimerContext';
+import Stats from './States';
+import Uppermenu from './Uppermenu';
 
-const TypingBox = ({words}) => {
+var randomWords = require('random-words');
+const TypingBox = () => {
     const inputTextRef = useRef(null);
 
      const[currCharIndex,setCurrCharIndex] = useState(0);
@@ -8,11 +12,32 @@ const TypingBox = ({words}) => {
      const[countDown,setCountDown]= useState(15);
      const[testStart,setTestStart]= useState(false);
      const[testOver,setTestOver]= useState(false);
+     const[intervalId,setIntervalId]= useState(null);
+     const[correctChars,setCorrectChars] = useState(0);
+     const[correctWords,setCorrectWords] = useState(0);
+     const [wordsArray,setWordsArray] = useState(()=>{
+       return randomWords(100);
+     });
 
-    const wordSpanRef = Array(words.length).fill(0).map(i=>createRef(null));
+     const words = useMemo(()=>{
+        return wordsArray
+     },[wordsArray]);
+
+     const wordSpanRef = useMemo(()=>{
+         return Array(words.length).fill(0).map(i=>createRef(null));
+     },[words]); 
      
+     const resetWordSpanRefClassNames =()=>{
+        wordSpanRef.map(i=>{
+            Array.from(i.current.childNodes).map(j=>{
+                j.className = 'char';
+            })
+        })
+        wordSpanRef[0].current.childNodes[0].className= 'char current';
+     }
     const startTimer = ()=>{
         const intervalId = setInterval(() => {
+            setIntervalId(intervalId);
             setCountDown(pre=>{
                 if(pre===1){
                     clearInterval(intervalId);
@@ -33,6 +58,11 @@ const TypingBox = ({words}) => {
        
         let allChildrenSpan = wordSpanRef[currWordIndex].current.childNodes;
          if(e.keyCode===32){
+
+            const correctChars = wordSpanRef[currWordIndex].current.querySelectorAll('.correct');
+            if(correctChars.length===allChildrenSpan.length){
+                setCorrectWords(correctWords+1);
+            }
             if(allChildrenSpan.length <= currCharIndex){
                 allChildrenSpan[currCharIndex-1].classList.remove('right');
             }
@@ -83,7 +113,8 @@ const TypingBox = ({words}) => {
 
          if(e.key===allChildrenSpan[currCharIndex].innerText){
             allChildrenSpan[currCharIndex].className = 'char correct';
-         }
+            setCorrectChars(correctChars+1); 
+        }
          else{
             allChildrenSpan[currCharIndex].className = 'char inCorrect';
          }
@@ -96,18 +127,43 @@ const TypingBox = ({words}) => {
          }
          
          setCurrCharIndex(currCharIndex=>currCharIndex+1);
-    }
+        }
+
+       const calculateWpm=()=>{
+        return Math.round((correctChars/5)/(testTime/60));
+       }
+       const calculateAccuracy = ()=>{
+        return Math.round((correctWords/currWordIndex)*100);
+       }
     const focusInput=()=>{
         inputTextRef.current.focus();
     }
+    
+    const testreset =()=> {
+        setCurrCharIndex(0);
+        setCurrWordIndex(0);
+        setTestStart(false);
+        setTestOver(false);
+        clearInterval(intervalId);
+        setCountDown(testTime);
+        let random =  randomWords(100);
+        setWordsArray(random);
+        resetWordSpanRefClassNames();
+    }
+
     useEffect(()=>{
        focusInput();
        wordSpanRef[0].current.childNodes[0].className= 'char current';
     },[])
+     const {testTime} = useTestMode();
+
+    useEffect(()=>{
+        testreset();
+     },[testTime])
   return (
     <div>
-     <h1>{countDown}</h1>
-     {testOver? (<h1>Test Over</h1>):(<div className='type-box' onClick={focusInput}>
+     <Uppermenu countDown={countDown}/>
+     {testOver? (<Stats wpm={calculateWpm()} accuracy={calculateAccuracy()}/>):(<div className='type-box' onClick={focusInput}>
         <div className='words'>
               {words.map((word,index)=>(
                 <span className="word" ref={wordSpanRef[index]} key={index}>
