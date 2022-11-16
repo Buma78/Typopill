@@ -129,4 +129,13 @@ export const GlobalStyles = createGlobalStyle`
     font-size:30px;
     color:gold;
   }
+
+  .left-stats{
+    width :50%;
+    padding :30px;
+  }
+
+  .right-stats{
+    width : 70%;
+  }
 `;

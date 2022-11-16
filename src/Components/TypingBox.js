@@ -15,13 +15,17 @@ const TypingBox = () => {
      const[intervalId,setIntervalId]= useState(null);
      const[correctChars,setCorrectChars] = useState(0);
      const[correctWords,setCorrectWords] = useState(0);
-     const [wordsArray,setWordsArray] = useState(()=>{
+     const[incorrectChars,setIncorrectChars] = useState(0);
+     const[extraChars,setExtraChars] = useState(0);
+     const[missedChars,setMissedChars] = useState(0);
+     const[graphData,setGraphData] = useState([]);
+     const[wordsArray,setWordsArray] = useState(()=>{
        return randomWords(100);
      });
 
      const words = useMemo(()=>{
         return wordsArray
-     },[wordsArray]);
+     },[wordsArray]); 
 
      const wordSpanRef = useMemo(()=>{
          return Array(words.length).fill(0).map(i=>createRef(null));
@@ -37,8 +41,14 @@ const TypingBox = () => {
      }
     const startTimer = ()=>{
         const intervalId = setInterval(() => {
-            setIntervalId(intervalId);
             setCountDown(pre=>{
+
+                setCorrectChars((correctChars)=>{
+                    setGraphData((data)=>{
+                        return [...data,[testTime-pre,Math.round((correctChars/5)/((testTime-pre + 1)/60))]]
+                    })
+                    return correctChars; 
+                })
                 if(pre===1){
                     clearInterval(intervalId);
                     setCountDown(0);
@@ -49,6 +59,7 @@ const TypingBox = () => {
                 }
             });
         },1000);
+        setIntervalId(intervalId);
     }
     const handlekey =(e)=>{
         if(!testStart){
@@ -60,6 +71,8 @@ const TypingBox = () => {
          if(e.keyCode===32){
 
             const correctChars = wordSpanRef[currWordIndex].current.querySelectorAll('.correct');
+            const incorrectChars = wordSpanRef[currWordIndex].current.querySelectorAll('.incorrect');
+            setMissedChars(missedChars + (allChildrenSpan.length-(incorrectChars.length+correctChars.length)));
             if(correctChars.length===allChildrenSpan.length){
                 setCorrectWords(correctWords+1);
             }
@@ -108,6 +121,7 @@ const TypingBox = () => {
 
           wordSpanRef[currWordIndex].current.append(newSpan);
           setCurrCharIndex(currCharIndex+1);
+          setExtraChars(extraChars+1);
             return;
          }
 
@@ -117,6 +131,7 @@ const TypingBox = () => {
         }
          else{
             allChildrenSpan[currCharIndex].className = 'char inCorrect';
+            setIncorrectChars(incorrectChars+1);
          }
 
          if(currCharIndex+1 === allChildrenSpan.length){
@@ -162,8 +177,8 @@ const TypingBox = () => {
      },[testTime])
   return (
     <div>
+     {testOver? (<Stats wpm={calculateWpm()} accuracy={calculateAccuracy()} correctChars={correctChars}graphData={graphData} incorrectChars={incorrectChars} extraChars={extraChars} missedChars={missedChars}/>):(<div className='type-box' onClick={focusInput}>
      <Uppermenu countDown={countDown}/>
-     {testOver? (<Stats wpm={calculateWpm()} accuracy={calculateAccuracy()}/>):(<div className='type-box' onClick={focusInput}>
         <div className='words'>
               {words.map((word,index)=>(
                 <span className="word" ref={wordSpanRef[index]} key={index}>
