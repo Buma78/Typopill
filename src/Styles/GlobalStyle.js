@@ -8,7 +8,7 @@ export const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
   }
   body{
-    background: black;
+    background: ${({theme})=>theme.background};;
     color: white;
     padding :0;
     margin: 0;
@@ -137,5 +137,14 @@ export const GlobalStyles = createGlobalStyle`
 
   .right-stats{
     width : 70%;
+  }
+
+  .footer,.header{
+    display: flex;
+    width:1000px;
+    margin-left:auto;
+    margin-right:auto;
+    justify-content:space-between;
+    height: 60px;
   }
 `;

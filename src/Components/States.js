@@ -5,11 +5,9 @@ const Stats = ({wpm,accuracy,graphData,correctChars,incorrectChars,extraChars,mi
    
   var timeSet = new Set();
   const newGraph = graphData.filter((i)=>{
-    if(!timeSet.has(i[0])){
-      timeSet.add(i[0]);
-      return i;
+  return (!timeSet.has(i[0])) ? timeSet.add(i[0]): ""
     }
-  })
+  )
   return (
     <div className='stats-box'>
         <div className='left-stats'>

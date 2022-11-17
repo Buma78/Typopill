@@ -33,10 +33,10 @@ const TypingBox = () => {
      
      const resetWordSpanRefClassNames =()=>{
         wordSpanRef.map(i=>{
-            Array.from(i.current.childNodes).map(j=>{
-                j.className = 'char';
+            return (Array.from(i.current.childNodes).map(j=>{
+                return (j.className = 'char');
             })
-        })
+        )})
         wordSpanRef[0].current.childNodes[0].className= 'char current';
      }
     const startTimer = ()=>{
@@ -170,6 +170,7 @@ const TypingBox = () => {
        focusInput();
        wordSpanRef[0].current.childNodes[0].className= 'char current';
     },[])
+
      const {testTime} = useTestMode();
 
     useEffect(()=>{
