@@ -1,22 +1,18 @@
-import { ThemeProvider } from "styled-components";
-import Footer from "./Components/Footer";
-import Header from "./Components/Header";
-import TypingBox from "./Components/TypingBox";
-import { useTheme } from "./Contexts/ThemeContext";
-import { GlobalStyles } from "./Styles/GlobalStyle";
+import { Route, Routes } from "react-router-dom";
+import DynamicPage from "./Pages/DynamicPage";
+import ErrorPage from "./Pages/ErrorPage";
+import HomePage from "./Pages/HomePage";
+import UserPage from "./Pages/UserPage";
 
 function App() {
-  const {Theme} = useTheme();
-
+  
   return (
-    <ThemeProvider theme={Theme}>
-    <div className="canvas">
-    <GlobalStyles/>
-    <Header/>
-      <TypingBox/>
-      <Footer/>
-    </div>
-    </ThemeProvider>
+    <Routes>
+      <Route path="/" element={<HomePage/>}></Route>
+      <Route path="/user" element={<UserPage/>}></Route>
+      <Route path="/user/:Id" element={<DynamicPage/>}></Route>
+      <Route path="*" element={<ErrorPage/>}></Route>
+    </Routes>
   );
 }
 

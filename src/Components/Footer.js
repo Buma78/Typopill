@@ -4,10 +4,11 @@ import { useTheme } from '../Contexts/ThemeContext';
 import { themeOptions } from '../Styles/Theme';
 
 const Footer = () => {
-    const {setTheme} = useTheme();
+    const {setTheme,Theme,defaultTheme} = useTheme();
 
     const handleThemeChange =(e)=> {
         setTheme(e.value);
+        localStorage.setItem('theme',JSON.stringify(e.value));
     }
   return (
     <div className='footer'>
@@ -19,6 +20,11 @@ const Footer = () => {
                 options = {themeOptions}
                 menuPlacement="top"
                 onChange={handleThemeChange}
+                defaultValue={{value:defaultTheme,label:defaultTheme.label}}
+                styles={{
+                    control:(styles)=>({...styles,backgroundColor:Theme.background}),
+                    menu:(styles)=>({...styles,backgroundColor:Theme.background})
+                }}
            />
         </div>
     </div>

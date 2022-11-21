@@ -39,6 +39,9 @@ const TypingBox = () => {
         )})
         wordSpanRef[0].current.childNodes[0].className= 'char current';
      }
+
+     const {testTime} = useTestMode();
+
     const startTimer = ()=>{
         const intervalId = setInterval(() => {
             setCountDown(pre=>{
@@ -167,15 +170,14 @@ const TypingBox = () => {
     }
 
     useEffect(()=>{
+        testreset();
+     },[testTime])
+     
+    useEffect(()=>{
        focusInput();
        wordSpanRef[0].current.childNodes[0].className= 'char current';
     },[])
 
-     const {testTime} = useTestMode();
-
-    useEffect(()=>{
-        testreset();
-     },[testTime])
   return (
     <div>
      {testOver? (<Stats wpm={calculateWpm()} accuracy={calculateAccuracy()} correctChars={correctChars}graphData={graphData} incorrectChars={incorrectChars} extraChars={extraChars} missedChars={missedChars}/>):(<div className='type-box' onClick={focusInput}>
