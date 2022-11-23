@@ -8,8 +8,8 @@ export const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
   }
   body{
-    background: ${({theme})=>theme.background};;
-    color: white;
+    background: ${({theme})=>theme.background};
+    color: ${({theme})=>theme.title};
     padding :0;
     margin: 0;
     transition: all 0.25s linear;
@@ -29,7 +29,7 @@ export const GlobalStyles = createGlobalStyle`
   .type-box{
        display:block;
        max-width:1000px;
-       height: 150px;
+       height: 170px;
        position: relative;
        margin-left:auto;
        margin-right:auto;

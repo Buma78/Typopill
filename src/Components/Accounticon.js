@@ -1,25 +1,32 @@
 import React, { useState } from 'react'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { AppBar, makeStyles, Modal, Tab, Tabs } from '@material-ui/core';
+import { AppBar, Box, makeStyles, Modal, Tab, Tabs } from '@material-ui/core';
 import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { auth } from '../FirebaseConfig';
 import {useAuthState} from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
+import { useAlert } from '../Contexts/AlertContext';
+import GoogleButton from 'react-google-button';
+import { signInWithPopup,GoogleAuthProvider } from 'firebase/auth';
 const useStyle = makeStyles(()=>({
     modal:{
         display: 'flex',
         alignItems:'center',
-        justifyContent:'center'
+        justifyContent:'center',
+        backdropFilter:"blur(1.5px)"
     },
     box:{
-        width : 400
+        width : 400,
+        textAlign : "Center",
+        border: "1px solid"
     }
 }))
 const Accounticon = () => {
     const [open,setOpen] = useState(false);
     const[value,setValue] = useState(0);
+    const {setAlert} = useAlert();
     const handleValueChange = (e,v)=>{
         setValue(v);
     }
@@ -30,7 +37,11 @@ const Accounticon = () => {
 
     const logout=()=>{
         auth.signOut().then((ok)=>{
-            alert("logged out");
+            setAlert({
+                open:true,
+                type:"success",
+                message:"Logged out"
+            })
         }).catch((err)=>{
             alert("not able to logout");
         })
@@ -43,6 +54,25 @@ const Accounticon = () => {
         else{
             setOpen(true);
         }
+    }
+    
+    const googleProvider = new GoogleAuthProvider();
+    const signInWithGoogle =()=>{
+        signInWithPopup(auth,googleProvider).then((res)=>{
+            setAlert({
+                open : true,
+                type : "success",
+                message: "Looged in"
+            });
+            handleClose();
+        }).catch((err)=>{
+            setAlert({
+                open : true,
+                type :"error",
+                message : "not able to use Google Authentication"
+            })
+        })
+
     }
 
     const classes = useStyle();
@@ -67,8 +97,12 @@ const Accounticon = () => {
          </AppBar>
          {value===0 && <LoginForm handleClose={handleClose}/>}
          {value===1 && <SignupForm handleClose={handleClose}/>}
-          </div>
 
+          <Box className={classes.Box}>
+            <span style={{display:'block',padding:'1rem'}}>OR</span>
+            <GoogleButton style={{width:'100%'}} onClick={signInWithGoogle}/>
+          </Box>
+          </div>
 
         </Modal>
     </div>
