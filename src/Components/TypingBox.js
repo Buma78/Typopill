@@ -1,15 +1,23 @@
 import React, { createRef, useEffect, useMemo, useRef, useState } from 'react'
-import { useTestMode } from '../Contexts/TimerContext';
+import { useTestMode } from '../Contexts/TestMode';
 import Stats from './States';
 import Uppermenu from './Uppermenu';
 
 var randomWords = require('random-words');
 const TypingBox = () => {
     const inputTextRef = useRef(null);
-
+     
+    const {testTime,testMode,testWord} = useTestMode();
      const[currCharIndex,setCurrCharIndex] = useState(0);
      const[currWordIndex,setCurrWordIndex] = useState(0);
-     const[countDown,setCountDown]= useState(15);
+     const[countDown,setCountDown]= useState(()=>{
+        if(testMode==='word-mode'){
+            return 180;
+        }
+        else{
+            return testTime;
+        }
+     });
      const[testStart,setTestStart]= useState(false);
      const[testOver,setTestOver]= useState(false);
      const[intervalId,setIntervalId]= useState(null);
@@ -20,6 +28,9 @@ const TypingBox = () => {
      const[missedChars,setMissedChars] = useState(0);
      const[graphData,setGraphData] = useState([]);
      const[wordsArray,setWordsArray] = useState(()=>{
+        if(testMode==='word-mode'){
+            return randomWords(testWord);
+        }
        return randomWords(100);
      });
 
@@ -40,7 +51,6 @@ const TypingBox = () => {
         wordSpanRef[0].current.childNodes[0].className= 'char current';
      }
 
-     const {testTime} = useTestMode();
 
     const startTimer = ()=>{
         const intervalId = setInterval(() => {
@@ -48,7 +58,8 @@ const TypingBox = () => {
 
                 setCorrectChars((correctChars)=>{
                     setGraphData((data)=>{
-                        return [...data,[testTime-pre,Math.round((correctChars/5)/((testTime-pre + 1)/60))]]
+                        const startTime = (testMode==='word-mode')?180:testTime;
+                        return [...data,[startTime-pre,Math.round((correctChars/5)/((startTime-pre + 1)/60))]]
                     })
                     return correctChars; 
                 })
@@ -72,6 +83,12 @@ const TypingBox = () => {
        
         let allChildrenSpan = wordSpanRef[currWordIndex].current.childNodes;
          if(e.keyCode===32){
+              
+            if(currWordIndex===wordsArray.length-1){
+                clearInterval(intervalId);
+                setTestOver(true);
+                return;
+            }
 
             const correctChars = wordSpanRef[currWordIndex].current.querySelectorAll('.correct');
             const incorrectChars = wordSpanRef[currWordIndex].current.querySelectorAll('.incorrect');
@@ -148,7 +165,7 @@ const TypingBox = () => {
         }
 
        const calculateWpm=()=>{
-        return Math.round((correctChars/5)/(testTime/60));
+        return Math.round((correctChars/5)/((graphData[graphData.length-1][0]+1)/60));
        }
        const calculateAccuracy = ()=>{
         return Math.round((correctWords/currWordIndex)*100);
@@ -164,14 +181,20 @@ const TypingBox = () => {
         setTestOver(false);
         clearInterval(intervalId);
         setCountDown(testTime);
-        let random =  randomWords(100);
-        setWordsArray(random);
+        if(testMode==='word-mode'){
+            let random =  randomWords(testWord);
+            setWordsArray(random);
+            setCountDown(180);
+        }else{
+            let random =  randomWords(100);
+            setWordsArray(random);
+        }
         resetWordSpanRefClassNames();
     }
 
     useEffect(()=>{
         testreset();
-     },[testTime])
+     },[testTime,testMode,testWord])
      
     useEffect(()=>{
        focusInput();
