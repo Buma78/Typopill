@@ -3,8 +3,9 @@ import { auth, db } from '../FirebaseConfig';
 import {useAuthState} from 'react-firebase-hooks/auth';
 import Graph from './Graph';
 import { useAlert } from '../Contexts/AlertContext';
+import { RestartAlt } from '@mui/icons-material';
 
-const Stats = ({wpm,accuracy,graphData,correctChars,incorrectChars,extraChars,missedChars}) => {
+const Stats = ({wpm,accuracy,graphData,correctChars,incorrectChars,extraChars,missedChars,testreset}) => {
    
   var timeSet = new Set();
   const newGraph = graphData.filter((i)=>{
@@ -54,12 +55,17 @@ const Stats = ({wpm,accuracy,graphData,correctChars,incorrectChars,extraChars,mi
   return (
     <div className='stats-box'>
         <div className='left-stats'>
+          <div className='stats'>
           <div className='title'>wpm</div>
           <div className='subtitle'>{wpm}</div>
           <div className='title'>accuracy</div>
           <div className='subtitle'>{accuracy}</div>
           <div className='title'>Characters</div>
           <div className='subtitle'>{correctChars}/{incorrectChars}/{extraChars}/{missedChars}</div>
+          </div>
+
+          <RestartAlt onClick={testreset}/>
+
         </div>
         <div className='right-stats'>
             <Graph graphData={newGraph}/>

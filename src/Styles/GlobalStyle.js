@@ -143,7 +143,7 @@ export const GlobalStyles = createGlobalStyle`
     width : 70%;
   }
 
-  .footer,.header{
+  .header{
     display: flex;
     width:1000px;
     margin-left:auto;
@@ -152,6 +152,31 @@ export const GlobalStyles = createGlobalStyle`
     height: 60px;
   }
 
+  .footer{
+    display: flex;
+    flex-direction:column;
+    width:1000px;
+    margin-left:auto;
+    margin-right:auto;
+    justify-content:space-between;
+    align-items:center;
+    height: 60px;
+  }
+
+  .actual-footer{
+    display:flex;
+    justify-content:space-between;
+    width: 1000px;
+  }
+   
+   .hint{
+     kbd{
+      background: ${({theme})=>theme.title};
+      color: ${({theme})=>theme.background};
+      padding: 2.5px 5px;
+      border-radius:3px;
+     }
+   }
   .result-graph, .table{
     width: 1000px;
     margin : auto;
@@ -195,4 +220,15 @@ export const GlobalStyles = createGlobalStyle`
     align-items: center;
     font-size: 3rem;
        }
+
+       .instruction{
+        color: ${({theme})=>theme.title};
+       }
+
+    .reset-btn{
+      display:block;
+      margin:auto;
+      margin-top: 3rem;
+      transform: scale(2);
+    }
 `;

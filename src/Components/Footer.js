@@ -12,6 +12,12 @@ const Footer = () => {
     }
   return (
     <div className='footer'>
+        <div className='instructions'>
+            <div className='hint'>
+                press <kbd>Tab</kbd> to open command
+            </div>
+        </div>
+        <div className='actual-footer'>
         <div className='footer-links'>
             link
         </div>
@@ -26,6 +32,7 @@ const Footer = () => {
                     menu:(styles)=>({...styles,backgroundColor:Theme.background})
                 }}
            />
+        </div>
         </div>
     </div>
   )

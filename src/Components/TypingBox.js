@@ -1,3 +1,4 @@
+import { Dialog, DialogTitle } from '@material-ui/core';
 import React, { createRef, useEffect, useMemo, useRef, useState } from 'react'
 import { useTestMode } from '../Contexts/TestMode';
 import Stats from './States';
@@ -27,6 +28,7 @@ const TypingBox = () => {
      const[extraChars,setExtraChars] = useState(0);
      const[missedChars,setMissedChars] = useState(0);
      const[graphData,setGraphData] = useState([]);
+     const[openDialog,setOpenDialog] = useState(false);
      const[wordsArray,setWordsArray] = useState(()=>{
         if(testMode==='word-mode'){
             return randomWords(testWord);
@@ -50,7 +52,43 @@ const TypingBox = () => {
         )})
         wordSpanRef[0].current.childNodes[0].className= 'char current';
      }
-
+     
+     const handleDialogEvents = (e)=>{
+          if(e.keyCode===32){
+            e.preventDefault();
+              redoTest();
+            setOpenDialog(false);
+            return;
+          }
+          if(e.keyCode===13 || e.keyCode===9){
+            e.preventDefault();
+             testreset();
+            setOpenDialog(false);
+            return;
+          }
+          e.preventDefault();
+          setOpenDialog(false);
+          startTimer();
+     }
+     
+     const redoTest = ()=>{
+        setCurrCharIndex(0);
+        setCurrWordIndex(0);
+        setTestStart(false);
+        setTestOver(false);
+        clearInterval(intervalId);
+        setCountDown(testTime);
+        if(testMode === 'words'){
+            setCountDown(180);
+        }
+        setGraphData([]);
+        setCorrectChars(0);
+        setIncorrectChars(0);
+        setCorrectWords(0);
+        setMissedChars(0);
+        setExtraChars(0);
+        resetWordSpanRefClassNames();
+    }
 
     const startTimer = ()=>{
         const intervalId = setInterval(() => {
@@ -76,6 +114,15 @@ const TypingBox = () => {
         setIntervalId(intervalId);
     }
     const handlekey =(e)=>{
+
+        if(e.keyCode===9){
+            if(testStart){
+                clearInterval(intervalId);
+            }
+            e.preventDefault();
+            setOpenDialog(true);
+            return;
+        }
         if(!testStart){
             startTimer();
             setTestStart(true);
@@ -189,6 +236,12 @@ const TypingBox = () => {
             let random =  randomWords(100);
             setWordsArray(random);
         }
+        setGraphData([]);
+        setCorrectChars(0);
+        setIncorrectChars(0);
+        setCorrectWords(0);
+        setMissedChars(0);
+        setExtraChars(0);
         resetWordSpanRefClassNames();
     }
 
@@ -203,8 +256,8 @@ const TypingBox = () => {
 
   return (
     <div>
-     {testOver? (<Stats wpm={calculateWpm()} accuracy={calculateAccuracy()} correctChars={correctChars}graphData={graphData} incorrectChars={incorrectChars} extraChars={extraChars} missedChars={missedChars}/>):(<div className='type-box' onClick={focusInput}>
-     <Uppermenu countDown={countDown}/>
+     {testOver? (<Stats wpm={calculateWpm()} accuracy={calculateAccuracy()} correctChars={correctChars}graphData={graphData} incorrectChars={incorrectChars} extraChars={extraChars} missedChars={missedChars} testreset={testreset}/>):(<div className='type-box' onClick={focusInput}>
+     <Uppermenu countDown={countDown} currWordIndex={currWordIndex}/>
         <div className='words'>
               {words.map((word,index)=>(
                 <span className="word" ref={wordSpanRef[index]} key={index}>
@@ -218,6 +271,28 @@ const TypingBox = () => {
     )}
     
     <input type='text' className='hidden-Input' ref={inputTextRef} onKeyDown={(e)=>handlekey(e)}/>
+
+    <Dialog 
+          PaperProps={{
+            style:{
+                backgroundColor:'transparent',
+                boxShadow :'none'
+            }
+          }}
+        open={openDialog} onKeyDown={handleDialogEvents} style={{backdropFilter:'blur(2px)'}}>
+          
+        <DialogTitle>
+            <div className='instruction'>
+                press Space to redo
+            </div>
+            <div className='instruction'>
+                press tab/Enter to restart
+            </div>
+            <div className='instruction'>
+                press any other key to exit
+            </div>
+        </DialogTitle>
+    </Dialog>
     </div>
   )
 }
