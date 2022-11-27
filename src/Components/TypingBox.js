@@ -151,6 +151,10 @@ const TypingBox = () => {
             }
             
             wordSpanRef[currWordIndex+1].current.childNodes[0].className = 'char current';
+            
+            if(currWordIndex!==0 && wordSpanRef[currWordIndex+1].current.offsetLeft<wordSpanRef[currWordIndex].current.offsetLeft){
+                wordSpanRef[currWordIndex].current.scrollIntoView();
+            }
 
             setCurrWordIndex(setCurrWordIndex=>setCurrWordIndex+1);
             setCurrCharIndex(0);  
