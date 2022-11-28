@@ -5,6 +5,7 @@ import { useTheme } from "./Contexts/ThemeContext";
 import ComparePage from "./Pages/ComparePage";
 import DynamicPage from "./Pages/DynamicPage";
 import ErrorPage from "./Pages/ErrorPage";
+import Github from "./Pages/Github";
 import HomePage from "./Pages/HomePage";
 import UserPage from "./Pages/UserPage";
 import { GlobalStyles } from "./Styles/GlobalStyle";
@@ -21,6 +22,7 @@ function App() {
       <Route path="/user/:Id" element={<DynamicPage/>}></Route>
       <Route path="*" element={<ErrorPage/>}></Route>
       <Route path="/compare/:username" element={<ComparePage/>}></Route>
+      <Route path="/myGithub" element={<Github/>} />
     </Routes>
     </ThemeProvider>
   );

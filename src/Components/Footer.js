@@ -2,13 +2,19 @@ import React from 'react';
 import Select from 'react-select';
 import { useTheme } from '../Contexts/ThemeContext';
 import { themeOptions } from '../Styles/Theme';
-
+import GitHubIcon from '@mui/icons-material/GitHub';
+import { useNavigate } from 'react-router-dom';
 const Footer = () => {
     const {setTheme,Theme,defaultTheme} = useTheme();
 
     const handleThemeChange =(e)=> {
         setTheme(e.value);
         localStorage.setItem('theme',JSON.stringify(e.value));
+    }
+    const navigate = useNavigate();
+
+    const Gotogithub=()=>{
+        navigate("/myGithub")
     }
   return (
     <div className='footer'>
@@ -19,7 +25,7 @@ const Footer = () => {
         </div>
         <div className='actual-footer'>
         <div className='footer-links'>
-            link
+            <GitHubIcon onClick={Gotogithub} style={{cursor:"pointer"}}/>
         </div>
         <div className='footer-links'>
            <Select
