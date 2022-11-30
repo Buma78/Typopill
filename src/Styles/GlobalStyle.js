@@ -231,4 +231,15 @@ export const GlobalStyles = createGlobalStyle`
       margin-top: 3rem;
       transform: scale(2);
     }
+
+    .compareContainer{
+      width:100vw;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+
+    .userdtl{
+      width:50%;
+    }
 `;

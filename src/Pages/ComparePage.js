@@ -16,11 +16,9 @@ const ComparePage = () => {
         return response.data().uid;
     }
     
-
    const getData =async()=>{
        const userUId = await getUid();
        const {uid} = auth.currentUser;
-    
        const resultsRef = db.collection('Results');
        const tempData = [];
        const tempGraphData = [];
@@ -48,9 +46,14 @@ const ComparePage = () => {
         getData();
      },[])
   return (
-    <div>
+    <div className='compareContainer'>
+        <div className='userdtl'>
         <Graph graphData={loggedInUserGraphData}/>
+        </div>
+
+        <div className='userdtl'>
         <Graph graphData={compareUserGraphData}/>
+        </div>
     </div>
   )
 }
