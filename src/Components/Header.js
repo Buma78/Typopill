@@ -6,8 +6,13 @@ const Header = () => {
   return (
     <div className='header'>
         <div className='logo' style={{display:'flex'}}>
-             <span style={{display:'block',marginRight:'6px'}}><KeyboardIcon/></span>
              <CompareButton/>
+        </div>
+        <div className='logo'>
+          <h2 style={{marginRight:'6px'}}>
+         <KeyboardIcon/>
+         </h2>
+           <h2>Typopill</h2>
         </div>
         <div style={{cursor:"pointer"}}>
              <Accounticon />

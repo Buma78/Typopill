@@ -242,4 +242,10 @@ export const GlobalStyles = createGlobalStyle`
     .userdtl{
       width:50%;
     }
+
+    .logo{
+      display:flex;
+      flex-direction:row;
+      justify-content:center;
+    }
 `;
