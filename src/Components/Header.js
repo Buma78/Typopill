@@ -12,7 +12,7 @@ const Header = () => {
           <h2 style={{marginRight:'6px'}}>
          <KeyboardIcon/>
          </h2>
-           <h2>Typopill</h2>
+           <h2>Typo-pill</h2>
         </div>
         <div style={{cursor:"pointer"}}>
              <Accounticon />
