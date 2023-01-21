@@ -29,7 +29,7 @@ const LoginForm = ({handleClose}) => {
         }).catch((err)=>{
             setAlert({
                 open : true,
-                type : 'error',
+                type : "error",
                 message : ErrorMapping[err.code] || "some error ocurred"
             })
         });

@@ -42,9 +42,11 @@ const ComparePage = () => {
              })
        });
    }
+   
      useEffect(()=>{
         getData();
      },[])
+
   return (
     <div className='compareContainer'>
         <div className='userdtl'>

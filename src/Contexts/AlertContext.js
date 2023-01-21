@@ -4,7 +4,7 @@ import { createContext, useContext, useState } from "react";
 
 const AlertContext = createContext();
 
-export const AlerContextProvider=({children})=>{
+export const AlertContextProvider=({children})=>{
 
     const [alert,setAlert] = useState({
         open : false,

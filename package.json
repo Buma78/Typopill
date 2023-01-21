@@ -23,7 +23,8 @@
     "react-scripts": "5.0.1",
     "react-select": "^5.6.1",
     "styled-components": "^5.3.6",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yarn": "^1.22.19"
   },
   "scripts": {
     "start": "react-scripts start",

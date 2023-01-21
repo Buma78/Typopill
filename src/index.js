@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import { AlerContextProvider } from './Contexts/AlertContext';
+import { AlertContextProvider } from './Contexts/AlertContext';
 import { ThemeContextProvider } from './Contexts/ThemeContext';
 import { TestModeContextprovider } from './Contexts/TestMode';
 
@@ -11,11 +11,11 @@ root.render(
   <React.StrictMode>
   <ThemeContextProvider>
   <TestModeContextprovider>
-  <AlerContextProvider>
+  <AlertContextProvider>
     <BrowserRouter>
     <App />
     </BrowserRouter>
-    </AlerContextProvider>
+    </AlertContextProvider>
   </TestModeContextprovider>
    </ThemeContextProvider>
   </React.StrictMode>
